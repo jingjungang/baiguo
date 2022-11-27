@@ -1,0 +1,151 @@
+package com.mimi.baiguo.main;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.mimi.baiguo.R;
+import com.mimi.baiguo.activity.LoginActivity;
+import com.mimi.baiguo.mydoctor.FocusFragment;
+import com.mimi.baiguo.mydoctor.InteractionFragment;
+
+/**
+ * 
+ * @ClassName: menuFragment
+ * @author jjg
+ * 
+ */
+public class ThreeMenuFragment extends Fragment implements OnClickListener {
+	/**
+	 * fragement
+	 */
+	public InteractionFragment frg_Interaction;
+	public FocusFragment frg_Focus;
+	TextView btn_help, btn_attention;
+	SharedPreferences sharedPreferences;
+	/**
+	 * 用于对Fragment进行管理
+	 */
+	private FragmentManager fragmentManager;
+
+	public ThreeMenuFragment() {
+	}
+
+	/** 登录状态判断 */
+	String loginstate;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		View nurseRecordView = inflater.inflate(R.layout.fragment_menu,
+				container, false);
+
+		btn_help = (TextView) nurseRecordView.findViewById(R.id.help);
+		btn_attention = (TextView) nurseRecordView.findViewById(R.id.attention);
+
+		((TextView) nurseRecordView.findViewById(R.id.tv_title))
+				.setText(R.string.tab_3);
+		btn_help.setOnClickListener(this);
+		btn_attention.setOnClickListener(this);
+		sharedPreferences = getActivity()
+				.getSharedPreferences("loginstate", Activity.MODE_MULTI_PROCESS);
+		fragmentManager = this.getChildFragmentManager();
+		// 第一次启动时选中第0个tab
+		setTabSelection(0);
+		return nurseRecordView;
+	}
+
+	/**
+	 * 根据传入的index参数来设置选中的tab页。
+	 * 
+	 * @param index
+	 *            每个tab页对应的下标。
+	 */
+	public void setTabSelection(int index) {
+		// 每次选中之前先清楚掉上次的选中状态
+		// clearSelection();
+		// 开启一个Fragment事务
+		loginstate = sharedPreferences.getString("loginstate", "false");
+		if (!"true".equals(loginstate)) {
+			Toast.makeText(getActivity(), "请先登录！", Toast.LENGTH_SHORT).show();
+			Intent intent = new Intent(getActivity(), LoginActivity.class);
+			startActivity(intent);
+		}
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
+		hideFragments(transaction);
+		switch (index) {
+		case 0:
+			if (frg_Interaction == null) {
+				frg_Interaction = new InteractionFragment();
+				transaction.add(R.id.content, frg_Interaction);
+			} else {
+				transaction.show(frg_Interaction);
+			}
+			break;
+		case 1:
+			if (frg_Focus == null) {
+				frg_Focus = new FocusFragment();
+				transaction.add(R.id.content, frg_Focus);
+			} else {
+				transaction.show(frg_Focus);
+			}
+			break;
+
+		default:
+			break;
+		}
+		transaction.commit();
+	}
+
+	/**
+	 * 将所有的Fragment都置为隐藏状态。
+	 * 
+	 * @param transaction
+	 *            用于对Fragment执行操作的事务
+	 */
+	private void hideFragments(FragmentTransaction transaction) {
+		if (frg_Interaction != null) {
+			transaction.hide(frg_Interaction);
+		}
+		if (frg_Focus != null) {
+			transaction.hide(frg_Focus);
+		}
+	}
+
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+	}
+
+	@Override
+	public void onClick(View arg0) {
+		// TODO Auto-generated method stub
+		switch (arg0.getId()) {
+		case R.id.help:
+			btn_help.setTextColor(getResources().getColor(R.color.title_text));
+			btn_attention.setTextColor(getResources().getColor(R.color.black));
+			setTabSelection(0);
+			break;
+		case R.id.attention:
+			btn_help.setTextColor(getResources().getColor(R.color.black));
+			btn_attention.setTextColor(getResources().getColor(
+					R.color.title_text));
+			setTabSelection(1);
+			break;
+		default:
+			break;
+		}
+	}
+}

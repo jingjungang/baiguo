@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/xuanzezhaopian_btn"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:gravity="center|left"
+            android:paddingLeft="10dp"
+            android:text="选择图片方式"
+            android:textColor="@color/text_white"
+            android:textSize="20sp" 
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tv_selectpicture"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/text_white"
+            android:gravity="center|left"
+            android:paddingLeft="10dp"
+            android:text="选择照片"
+            android:textSize="20sp" 
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text_gray" />
+
+        <TextView
+            android:id="@+id/tv_selectcamera"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/text_white"
+            android:gravity="center|left"
+            android:paddingLeft="10dp"
+            android:text="拍照"
+            android:textSize="20sp" 
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,24 @@
+package com.mimi.baiguo.connector;
+
+import java.util.List;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.ListView;
+import com.mimi.baiguo.R;
+
+public class ContactActivity extends Activity {
+
+	private List<ContactPeople> peoples = null;
+	private ListView listview;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
+		listview = (ListView) findViewById(R.id.listview);
+		peoples = GetContacts.getAllContacts(ContactActivity.this);
+		listview.setAdapter(new MyAdapter(this, peoples));
+
+	}
+}

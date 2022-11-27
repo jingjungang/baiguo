@@ -1,0 +1,55 @@
+package com.mimi.baiguo.main;
+
+/**
+ * 健康生活
+ * 景俊钢
+ * 2016年8月2日 16:37:45
+ */
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.mimi.baiguo.R;
+import com.mimi.baiguo.util.RoundProgressBar;
+
+public class HealthLife extends Fragment {
+	private RoundProgressBar mRoundProgressBar;
+	private int progress = 0;
+	View root;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		root = inflater.inflate(R.layout.activity_cricle_progress, container,
+				false);
+		init();
+		return root;
+	}
+
+	private void init() {
+		// TODO Auto-generated method stub
+		TextView textView = (TextView) root.findViewById(R.id.tv_rank);
+		textView.setText(Html.fromHtml("<u>" + "您当前排名123名，查看更多 >" + "</u>"));
+		mRoundProgressBar = (RoundProgressBar) root
+				.findViewById(R.id.roundProgressBar);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (progress <= 100) {
+					progress += 1;
+					mRoundProgressBar.setProgress(progress);
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}).start();
+	}
+
+}

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eef8e5"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/a1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        layout="@layout/common_top" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/a1"
+        android:layout_gravity="top|center"
+        android:background="#e8ecd4" >
+
+        <com.mimi.baiguo.xlistview.XListView
+            android:id="@+id/zhishi_lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="1dp"
+            android:background="@color/transplant"
+            android:divider="#e8ecd4"
+            android:dividerHeight="5dp" />
+    </FrameLayout>
+
+</RelativeLayout>

@@ -1,0 +1,100 @@
+package com.mimi.baiguo.adapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Context;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+import com.mimi.baiguo.R;
+import com.mimi.baiguo.util.AsyncLoadingImg;
+import com.mimi.baiguo.widget.imageview.CircularImage;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+public class Rank_Adapter extends BaseAdapter {
+
+	private Context context;
+	private JSONArray TitleList;
+	ImageLoader imageLoader;
+
+	public Rank_Adapter(Context context, JSONArray TitleList) {
+		super();
+		this.context = context;
+		this.TitleList = TitleList;
+		imageLoader = AsyncLoadingImg.getImageLoader(context);
+	}
+
+	public int getCount() {
+		// TODO Auto-generated method stub
+		if (TitleList == null) {
+			return 0;
+		} else {
+			return TitleList.length();
+		}
+	}
+
+	public Object getItem(int arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public View getView(int position, View arg1, ViewGroup arg2) {
+		// TODO Auto-generated method stub
+		HasText hastext;
+		hastext = new HasText();
+		arg1 = LayoutInflater.from(context).inflate(R.layout.adapter_rank_item,
+				null);
+		hastext.tv_rank = (TextView) arg1.findViewById(R.id.rank);
+		hastext.avar = (CircularImage) arg1.findViewById(R.id.avar);
+		hastext.tv_name = (TextView) arg1.findViewById(R.id.name);
+		hastext.tv_step = (TextView) arg1.findViewById(R.id.step);
+		hastext.tv_good = (TextView) arg1.findViewById(R.id.good);
+
+		try {
+			JSONObject jo = TitleList.getJSONObject(position);
+			String t = jo.getString("sort") == null ? "" : jo.getString("sort");
+			hastext.tv_rank.setText(t);
+			t = jo.getString("rname") == null ? "" : jo.getString("rname");
+			hastext.tv_name.setText(t);
+			t = jo.getString("step") == null ? "" : jo.getString("step");
+			hastext.tv_step.setText(t + "步");
+			t = jo.getString("praise") == null ? "" : jo.getString("praise");
+			hastext.tv_good.setText(t);
+			t = jo.getString("avatar") == null ? "" : jo.getString("avatar");
+			if (!TextUtils.isEmpty(t) && !t.equals("")) {
+				imageLoader.displayImage(t, hastext.avar,
+						AsyncLoadingImg.getDefaultOptions());
+			} else {
+				hastext.avar.setImageResource(R.drawable.icon_man);
+			}
+			if (position == 0 || position == 1 || position == 2) {
+				hastext.tv_rank.setBackground(context.getResources()
+						.getDrawable(R.drawable.ranking));
+			} else {
+				hastext.tv_rank.setBackgroundColor(context.getResources()
+						.getColor(R.color.transplant));
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return arg1;
+	}
+
+	class HasText {
+		TextView tv_rank, tv_name, tv_step, tv_good;
+		CircularImage avar;
+	}
+}

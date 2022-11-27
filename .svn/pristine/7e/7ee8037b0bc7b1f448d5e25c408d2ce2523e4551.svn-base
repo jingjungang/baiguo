@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="80dp"
+    android:orientation="horizontal" >
+
+    <!-- 资讯item -->
+
+    <com.mimi.baiguo.widget.imageview.CircularImage
+        android:id="@+id/iv_news_thumb"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="10dp"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:id="@+id/tv_news_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="center"
+        android:ellipsize="end"
+        android:lines="2"
+        android:textSize="16.0sp" />
+
+</LinearLayout>

@@ -1,0 +1,50 @@
+package com.mimi.baiguo.main;
+
+/**
+ * 员工关怀
+ * 景俊钢
+ * 2016年7月28日 11:09:03
+ */
+import com.mimi.baiguo.R;
+import com.mimi.baiguo.share.ShareActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+
+public class CareEmployee extends Fragment implements OnClickListener {
+	View root;
+	Button btn_share;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		root = inflater.inflate(R.layout.fragment_care_employee, container,
+				false);
+		btn_share = (Button) root.findViewById(R.id.share);
+		init();
+		return root;
+	}
+
+	private void init() {
+		// TODO Auto-generated method stub
+		btn_share.setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.share:
+			startActivity(new Intent(getActivity(), ShareActivity.class));
+			break;
+		}
+	}
+
+}

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.mimi.baiguo.yindaoye.SwitchLayout
+    	android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:id="@+id/switchLayoutID">
+    	<LinearLayout
+    	android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:background="@drawable/yindao1"/>
+    	
+    	<LinearLayout
+    	android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:background="@drawable/yindao2"/>
+    	
+    	<LinearLayout
+    	android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:background="@drawable/yindao3"/>
+    	
+    	
+    </com.mimi.baiguo.yindaoye.SwitchLayout>
+    <Button
+            android:id="@+id/btn_goto"
+            style="@style/white_big_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/linerLayoutID"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/start_use"
+            android:text="" 
+            android:visibility="gone"/>
+    <LinearLayout
+    	android:id="@+id/linerLayoutID"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dip"
+        android:orientation="horizontal">
+    	<ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:padding="15.0dip"
+            android:src="@drawable/guide_round" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:padding="15.0dip"
+            android:src="@drawable/guide_round" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:padding="15.0dip"
+            android:src="@drawable/guide_round" />
+
+    </LinearLayout>
+</RelativeLayout>

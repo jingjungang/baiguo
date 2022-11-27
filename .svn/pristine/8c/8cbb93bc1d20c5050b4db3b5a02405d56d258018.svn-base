@@ -1,0 +1,145 @@
+package com.mimi.baiguo.adapter;
+
+import java.util.List;
+import java.util.Map;
+
+import com.mimi.baiguo.R;
+import com.mimi.baiguo.mydoctor.DoctorDetailActivity;
+import com.mimi.baiguo.mydoctor.NetworkConsultingActivity;
+import com.mimi.baiguo.util.AsyncLoadingImg;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources.NotFoundException;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+public class FocusAdapter extends BaseAdapter {
+
+	private Context context;
+	private List<Map<String, String>> list;
+	ImageLoader imageLoader;
+	Intent intent;
+
+	public FocusAdapter(Context context, List<Map<String, String>> list) {
+		super();
+		imageLoader = AsyncLoadingImg.getImageLoader(context);
+		this.context = context;
+		this.list = list;
+	}
+
+	public List<Map<String, String>> getList() {
+		return list;
+	}
+
+	public void setList(List<Map<String, String>> list) {
+		this.list = list;
+	}
+
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		if (list != null) {
+			return list.size();
+		}
+		return 0;
+	}
+
+	@Override
+	public Object getItem(int arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long getItemId(int arg0) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public View getView(final int arg0, View arg1, ViewGroup arg2) {
+		// TODO Auto-generated method stub
+		ViewHodler hodler;
+		if (arg1 == null) {
+			hodler = new ViewHodler();
+			arg1 = LayoutInflater.from(context).inflate(R.layout.focus_itme,
+					null);
+			hodler.focus_img = (ImageView) arg1.findViewById(R.id.focus_img);
+			hodler.job_tv = (TextView) arg1.findViewById(R.id.job_tv);
+			hodler.name_tv = (TextView) arg1.findViewById(R.id.name_tv);
+			hodler.yiyuan_tv = (TextView) arg1.findViewById(R.id.yiyuan_tv);
+			hodler.details_layout = (LinearLayout) arg1
+					.findViewById(R.id.details_layout);
+			hodler.zixun_layout = (LinearLayout) arg1
+					.findViewById(R.id.zixun_layout);
+			arg1.setTag(hodler);
+		} else {
+			hodler = (ViewHodler) arg1.getTag();
+		}
+		try {
+			if (!TextUtils.isEmpty(list.get(arg0).get("avatar"))) {
+				imageLoader.displayImage(list.get(arg0).get("avatar"),
+						hodler.focus_img, AsyncLoadingImg.getDefaultOptions());
+			} else {
+				hodler.focus_img.setImageDrawable(context.getResources()
+						.getDrawable(R.drawable.icon_man));
+			}
+		} catch (NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		hodler.job_tv.setText(list.get(arg0).get("job"));
+		if (list.get(arg0).get("nickname").equals("")
+				&& list.get(arg0).get("nickname") != null) {
+			hodler.name_tv.setText(list.get(arg0).get("nickname"));
+		} else {
+			hodler.name_tv.setText(list.get(arg0).get("username"));
+		}
+		hodler.yiyuan_tv.setText(list.get(arg0).get("hospital"));
+		hodler.details_layout.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				// TODO Auto-generated method stub
+				intent = new Intent(context, DoctorDetailActivity.class);
+				Bundle b = new Bundle();
+				b.putString("id", list.get(arg0).get("userid"));
+				intent.putExtras(b);
+				context.startActivity(intent);
+			}
+		});
+		hodler.zixun_layout.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				// TODO Auto-generated method stub
+				intent = new Intent(context, NetworkConsultingActivity.class);
+				Bundle b = new Bundle();
+				b.putString("id", list.get(arg0).get("userid"));
+				intent.putExtras(b);
+				context.startActivity(intent);
+			}
+		});
+		return arg1;
+	}
+
+	class ViewHodler {
+		ImageView focus_img;
+		TextView job_tv;
+		TextView name_tv;
+		TextView yiyuan_tv;
+		LinearLayout details_layout;
+		LinearLayout zixun_layout;
+	}
+}

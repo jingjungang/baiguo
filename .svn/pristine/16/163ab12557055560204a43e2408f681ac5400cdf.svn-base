@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gray"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/img"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/star" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="75dp"
+        android:layout_gravity="left|center"
+        android:layout_weight="2"
+        android:gravity="left|center"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/gridview_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="left|center"
+            android:layout_weight="2.0"
+            android:gravity="bottom|center"
+            android:text="Title"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/lable"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="left|center"
+            android:layout_weight="2.0"
+            android:gravity="left|center"
+            android:text="lable"
+            android:textColor="@color/gray"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</LinearLayout>

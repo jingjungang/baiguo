@@ -1,0 +1,229 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android_custom="http://schemas.android.com/apk/res/com.mimi.baiguo"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:background="@color/common_theme" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="健康生活"
+            android:textColor="@color/white_color" />
+
+        <View
+            android:id="@+id/share"
+            android:layout_width="@dimen/view_share"
+            android:layout_height="@dimen/view_share"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:layout_toLeftOf="@+id/records"
+            android:background="@drawable/share" />
+
+        <View
+            android:id="@+id/records"
+            android:layout_width="@dimen/view_share"
+            android:layout_height="@dimen/view_share"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/records" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_steps"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="9" >
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="2016年8月2日  星期二"
+            android:textColor="#a1e100"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="@dimen/run_man_width"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_toLeftOf="@+id/temp"
+            android:background="@drawable/run_man" />
+
+        <View
+            android:id="@+id/temp"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tv_date" >
+
+            <com.mimi.baiguo.util.RoundProgressBar
+                android:id="@+id/roundProgressBar"
+                android:layout_width="@dimen/circle1"
+                android:layout_height="@dimen/circle1"
+                android:layout_centerInParent="true"
+                android_custom:roundColor="#eee8e8"
+                android_custom:roundProgressColor="#a1e100"
+                android_custom:roundWidth="8dip"
+                android_custom:textIsDisplayable="true"
+                android_custom:textSize="18sp" />
+
+            <com.mimi.baiguo.util.RoundProgressBar
+                android:id="@+id/roundProgressBar1"
+                android:layout_width="@dimen/circle2"
+                android:layout_height="@dimen/circle2"
+                android:layout_centerInParent="true"
+                android_custom:roundColor="#eee8e8"
+                android_custom:roundProgressColor="#a1e100"
+                android_custom:roundWidth="2dip"
+                android_custom:textIsDisplayable="true"
+                android_custom:textSize="18sp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_rank"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="您当前排名123名，查看更多 >"
+        android:textColor="#a1e100"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/lunbo"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:background="@drawable/lunbo1" />
+
+    <RelativeLayout
+        android:id="@+id/rl_store"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:text="健康有礼，运动生活 "
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_store"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:text=""
+            android:textColor="@color/black" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <View
+                android:id="@+id/v_gift_1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:background="@drawable/gift1" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="300积分" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <View
+                android:id="@+id/v_gift_2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:background="@drawable/gift2" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="800积分" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <View
+                android:id="@+id/v_gift_3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:background="@drawable/gift3" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="1000积分" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

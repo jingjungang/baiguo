@@ -1,0 +1,426 @@
+package com.mimi.baiguo.function.me;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.mimi.baiguo.API;
+import com.mimi.baiguo.R;
+import com.mimi.baiguo.activity.LoginActivity;
+import com.mimi.baiguo.util.Mdate;
+import com.mimi.baiguo.util.SystemBarTintManager;
+
+/***
+ * 患者基本信息
+ * 
+ * @author AAA
+ * 
+ */
+public class UserInfosActivity extends Activity {
+
+	private TextView tv_title, update_time;
+	private ImageButton btnBack;
+	private TextView tvTitle;
+	private TextView tvSave;
+	/** 姓名，年龄，身高，体重，就诊卡号，出生日期，婚姻状况,，身份证号，电子邮箱，通讯地址，所在地区，更新时间 */
+	private EditText user_name, user_age, height, weight, tvCard, marriage,
+			id_card, email, site, area;
+	private ImageView user_sex_iv;
+	TextView telephone; // 联系电话
+	private String Url = API.MYINFO; // 查询url
+	private String Url_eidt = API.MYINFO_EDIT; // 编辑url
+	private static SystemBarTintManager tintManager;
+	String Token = API.getToken();
+	String result;
+	Button patient_commit_btn;
+	String js = "";
+	Mdate birthday;
+	RadioGroup RGroup_Sex;
+	RadioButton RButton_nan, RButton_nv;
+	ProgressDialog dia;
+	int tips = 0;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		tintManager = new SystemBarTintManager(this);
+		tintManager.setStatusBarTintEnabled(true);
+		tintManager.setStatusBarTintResource(R.color.common_theme);
+		// getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+		setContentView(R.layout.activity_user_infos);
+		dia = new ProgressDialog(UserInfosActivity.this);
+		dia.setMessage("请稍候...");
+		dia.setCanceledOnTouchOutside(false);
+		init();
+		LoginActivity.startProgressDialog(this);
+		getUserInfos();
+	}
+
+	private void init() {
+		RGroup_Sex = (RadioGroup) findViewById(R.id.sex);
+		RButton_nan = (RadioButton) findViewById(R.id.rb_male);
+		RButton_nv = (RadioButton) findViewById(R.id.rb_female);
+		user_name = (EditText) findViewById(R.id.user_name);
+		user_age = (EditText) findViewById(R.id.user_age);
+		height = (EditText) findViewById(R.id.height);
+		weight = (EditText) findViewById(R.id.weight);
+		tvCard = (EditText) findViewById(R.id.tvCard);
+		birthday = (Mdate) findViewById(R.id.birthday);
+		String temp = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		birthday.setText(temp);
+		marriage = (EditText) findViewById(R.id.marriage);
+		id_card = (EditText) findViewById(R.id.id_card);
+		telephone = (TextView) findViewById(R.id.telephone);
+		telephone.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+					int arg3) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence arg0, int arg1,
+					int arg2, int arg3) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable arg0) {
+				// TODO Auto-generated method stub
+				tips++;
+				if (tips == 2) {
+					Toast.makeText(getApplicationContext(), "电话号码请谨慎修改",
+							Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+		email = (EditText) findViewById(R.id.email);
+		site = (EditText) findViewById(R.id.site);
+		area = (EditText) findViewById(R.id.area);
+		update_time = (TextView) findViewById(R.id.update_time);
+
+		tv_title = (TextView) findViewById(R.id.tv_title);
+		tv_title.setText(R.string.user_infos);
+		btnBack = (ImageButton) findViewById(R.id.ib_left_handle01);
+		btnBack.setBackgroundResource(R.drawable.back_a_normal2x);
+		btnBack.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
+		patient_commit_btn = (Button) findViewById(R.id.patient_commit_btn);
+		patient_commit_btn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				/*
+				 * JSONObject jo = new JSONObject(); try { jo.put("nickname",
+				 * user_name.getText().toString().trim()); jo.put("sex",
+				 * spin_sex.getSelectedItemPosition() + 1); jo.put("card",
+				 * id_card.getText().toString().trim()); jo.put("email",
+				 * email.getText().toString().trim()); jo.put("phone",
+				 * telephone.getText().toString().trim()); jo.put("birthday",
+				 * birthday.getText().toString().trim()); jo.put("age",
+				 * user_age.getText().toString().trim()); jo.put("adress",
+				 * site.getText().toString().trim()); } catch (JSONException e)
+				 * { // TODO Auto-generated catch block e.printStackTrace(); }
+				 * js = jo.toString();
+				 */
+				dia.show();
+				new Thread() {
+					public void run() {
+						result = Postmessage_edit(Url_eidt, Token);
+						Message m = new Message();
+						m.what = 2;
+						handler.sendMessage(m);
+					}
+				}.start();
+
+			}
+		});
+	}
+
+	public void getUserInfos() {
+		dia.show();
+		new Thread() {
+			public void run() {
+				result = Postmessage(Url, Token);
+				Message m = new Message();
+				m.what = 1;
+				handler.sendMessage(m);
+			}
+		}.start();
+	}
+
+	public String Postmessage(String Url, String Token) {
+
+		// String value="";
+		try {
+			URL url = new URL(Url);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("POST");
+			conn.setDoInput(true);
+			conn.setDoOutput(true);
+			conn.setRequestProperty("Content-Type",
+					"application/x-www-form-urlencoded");
+			conn.setRequestProperty("Charset", "utf-8");
+			String data = "token=" + URLEncoder.encode(Token, "UTF-8")
+					+ "&type=" + URLEncoder.encode("2", "UTF-8");
+			conn.setRequestProperty("Content-Length",
+					String.valueOf(data.getBytes().length));
+			OutputStream os = conn.getOutputStream();
+			os.write(data.getBytes());
+			os.flush();
+			InputStreamReader is = new InputStreamReader(conn.getInputStream());
+			BufferedReader bufferedReader = new BufferedReader(is);
+			StringBuffer strBuffer = new StringBuffer();
+			String line = null;
+			while ((line = bufferedReader.readLine()) != null) {
+				strBuffer.append(line);
+			}
+			result = strBuffer.toString();
+			is.close();
+			conn.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	/**
+	 * 
+	 * @param Url
+	 * @param Token
+	 * @param js
+	 * @return
+	 */
+	public String Postmessage_edit(String Url, String Token) {
+		String str = "";
+		// String value="";
+		try {
+			URL url = new URL(Url);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("POST");
+			conn.setDoInput(true);
+			conn.setDoOutput(true);
+			conn.setRequestProperty("Content-Type",
+					"application/x-www-form-urlencoded");
+			conn.setRequestProperty("Charset", "utf-8");
+			int int_sex = 1;
+			if (!RButton_nan.isChecked()) {
+				int_sex = 2;
+			}
+			if (id_card.getText().length() != 18) {
+				return "身份证号需18位!";
+			}
+			String data = "token="
+					+ URLEncoder.encode(Token, "UTF-8")
+					+ "&nickname="
+					+ URLEncoder.encode(user_name.getText().toString().trim(),
+							"UTF-8")
+					+ "&sex="
+					+ URLEncoder.encode(int_sex + "", "UTF-8")
+					+ "&age="
+					+ URLEncoder.encode(user_age.getText().toString().trim(),
+							"UTF-8")
+					+ "&birthday="
+					+ URLEncoder.encode(birthday.getText().toString().trim(),
+							"UTF-8")
+					+ "&idcard="
+					+ URLEncoder.encode(id_card.getText().toString().trim(),
+							"UTF-8")
+					+ "&email="
+					+ URLEncoder.encode(email.getText().toString().trim(),
+							"UTF-8")
+					+ "&address="
+					+ URLEncoder.encode(site.getText().toString().trim(),
+							"UTF-8");
+			conn.setRequestProperty("Content-Length",
+					String.valueOf(data.getBytes().length));
+			OutputStream os = conn.getOutputStream();
+			os.write(data.getBytes());
+			os.flush();
+			InputStreamReader is = new InputStreamReader(conn.getInputStream());
+			BufferedReader bufferedReader = new BufferedReader(is);
+			StringBuffer strBuffer = new StringBuffer();
+			String line = null;
+			while ((line = bufferedReader.readLine()) != null) {
+				strBuffer.append(line);
+			}
+			str = strBuffer.toString();
+			is.close();
+			conn.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return str;
+	}
+
+	Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			dia.dismiss();
+			if (msg.what == 1) {
+				LoginActivity.stopProgressDialog();
+				try {
+					if (null != result) {
+						JSONObject jo = new JSONObject(result);
+						int status = jo.getInt("status");
+						switch (status) {
+						case -1:
+							Toast.makeText(UserInfosActivity.this, "userid不存在",
+									Toast.LENGTH_SHORT).show();
+							break;
+						case -2:
+							Toast.makeText(UserInfosActivity.this, "未获取到用户信息",
+									Toast.LENGTH_SHORT).show();
+							break;
+						case -3:
+							Toast.makeText(UserInfosActivity.this,
+									"用户对应病例信息不存在", Toast.LENGTH_SHORT).show();
+							break;
+						case 1:
+							JSONObject joi = jo.getJSONObject("info");
+							user_name.setText(joi.getString("nickname")
+									.replace("null", ""));
+							// String bday = joi.getString("birthday");
+							// if (!TextUtils.isEmpty(bday)
+							// && !birthday.equals("null")) {
+							// bday = GetAge(new SimpleDateFormat("yyyy-MM-dd")
+							// .format(new Date(
+							// joi.getLong("birthdate") * 1000l)
+							// .toString()));
+							// } else {
+							// bday = "";
+							// }
+							user_age.setText(joi.getString("age").replace(
+									"null", ""));
+							// birthday.setText(new
+							// SimpleDateFormat("yyyy-MM-dd")
+							// .format(new Date(
+							// joi.getLong("birthday") * 1000l)));
+							birthday.setText(joi.getString("birthday").replace(
+									"null", ""));
+							id_card.setText(joi.getString("card").toString()
+									.replace("null", ""));
+							telephone.setText(joi.getString("mobile".replace(
+									"null", "")));
+							int pos = Integer.valueOf(joi.getString("sex")
+									.toString().replace("null", ""));
+							if (pos == 1) {
+								RButton_nan.setChecked(true);
+								RButton_nv.setChecked(false);
+							} else {
+								RButton_nan.setChecked(false);
+								RButton_nv.setChecked(true);
+							}
+							// sex.setText((joi.getString("sex").toString())
+							// .equals("1") ? "男" : "女");
+							email.setText(joi.getString("email").replace(
+									"null", ""));
+							site.setText(joi.getString("address").replace(
+									"null", ""));
+							update_time
+									.setText("更新时间："
+											+ new SimpleDateFormat(
+													"yyyy年MM月dd日").format(new Date(
+													joi.getLong("update_time") * 1000l)));
+							break;
+						}
+					} else {
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				JSONObject jo;
+				try {
+					jo = new JSONObject(result);
+					int status = jo.getInt("status");
+					switch (status) {
+					case 1:
+						Toast.makeText(getApplicationContext(), "保存成功",
+								Toast.LENGTH_SHORT).show();
+						finish();
+						break;
+					default:
+						Toast.makeText(getApplicationContext(), "保存失败",
+								Toast.LENGTH_SHORT).show();
+						break;
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					Toast.makeText(getApplicationContext(), "保存异常:" + result,
+							Toast.LENGTH_SHORT).show();
+				}
+			}
+		}
+	};
+
+	/**
+	 * 获取年龄
+	 * 
+	 * @return
+	 */
+	public String GetAge(String age) {
+		// TODO Auto-generated method stub
+		String year = "";
+		SimpleDateFormat myFormatter = new SimpleDateFormat("yyyy-MM-dd");
+		java.util.Date date = new Date();
+		java.util.Date mydate;
+		try {
+			mydate = myFormatter.parse(age);
+			long day = (date.getTime() - mydate.getTime())
+					/ (24 * 60 * 60 * 1000) + 1;
+			year = new java.text.DecimalFormat("#").format(day / 365f);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return year;
+	}
+}

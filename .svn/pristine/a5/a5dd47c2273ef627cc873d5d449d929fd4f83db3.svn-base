@@ -1,0 +1,87 @@
+package com.mimi.baiguo.connector;
+
+import java.util.List;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+import com.mimi.baiguo.R;
+
+public class MyAdapter extends BaseAdapter {
+
+	private List<ContactPeople> peoples = null;
+	private LayoutInflater linearlayout;
+
+	public MyAdapter(Context con, List<ContactPeople> listpeople) {
+		linearlayout = LayoutInflater.from(con);
+		peoples = listpeople;
+	}
+
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return peoples.size();
+	}
+
+	@Override
+	public Object getItem(int position) {
+		// TODO Auto-generated method stub
+		return peoples.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return position;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		// TODO Auto-generated method stub
+		ListItems listitems;
+		if (convertView == null) {
+			listitems = new ListItems();
+			convertView = linearlayout
+					.inflate(R.layout.connect_listitems, null);
+			listitems.name = (TextView) convertView.findViewById(R.id.name);
+			listitems.phone = (TextView) convertView.findViewById(R.id.phone);
+			// listitems.homephone=(TextView)convertView.findViewById(R.id.homephone);
+			// listitems.email=(TextView)convertView.findViewById(R.id.email);
+			// listitems.address=(TextView)convertView.findViewById(R.id.address);
+			// listitems.company=(TextView)convertView.findViewById(R.id.company);
+			// listitems.post=(TextView)convertView.findViewById(R.id.post);
+			// listitems.remark=(TextView)convertView.findViewById(R.id.remark);
+			// listitems.nickname=(TextView)convertView.findViewById(R.id.nickname);
+			convertView.setTag(listitems);
+		} else {
+			listitems = (ListItems) convertView.getTag();
+		}
+		ContactPeople people = peoples.get(position);
+		listitems.name.setText("姓名：" + people.getContactName());
+		listitems.phone.setText("手机：" + people.getContactPhone());
+		// listitems.homephone.setText("宅电："+people.getContactHomePhone());
+		// listitems.email.setText("邮箱："+people.getContactEmail());
+		// listitems.address.setText("地址："+people.getContactAddress());
+		// listitems.company.setText("公司："+people.getContactOrganizCompany());
+		// listitems.post.setText("职位："+people.getContactOrganizPost());
+		// listitems.remark.setText("备注："+people.getContactRemark());
+		// listitems.nickname.setText("昵称："+people.getContactNickname());
+		return convertView;
+	}
+
+	class ListItems {
+		private TextView name;
+		private TextView phone;
+		// private TextView homephone;
+		// private TextView email;
+		// private TextView address;
+		// private TextView company;
+		// private TextView post;
+		// private TextView remark;
+		// private TextView nickname;
+	}
+
+}

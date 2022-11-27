@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_title"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/common_theme"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true" >
+
+    <!-- Top -->
+
+
+    <!-- 左操作1 -->
+
+    <ImageButton
+        android:id="@+id/ib_left_handle01"
+        style="@style/top_ib_style"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp" />
+
+    <!-- 左操作2 -->
+
+    <TextView
+        android:id="@+id/tv_left_handle01"
+        style="@style/top_tv_style"
+        android:layout_marginTop="10dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/ib_left_handle01" />
+
+    <!-- 主标题 -->
+
+    <TextView
+        android:id="@+id/tv_title"
+        style="@style/top_tv_style"
+        android:layout_centerInParent="true" />
+
+    <!-- 右操作1 -->
+
+    <TextView
+        android:id="@+id/tv_right_handle02"
+        style="@style/top_tv_style"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/ib_right_handle2" />
+
+    <!-- 右操作2 -->
+
+    <ImageButton
+        android:id="@+id/ib_right_handle2"
+        style="@style/top_ib_style"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp" />
+
+</RelativeLayout>

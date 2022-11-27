@@ -1,0 +1,53 @@
+package com.mimi.baiguo;
+
+import com.alibaba.wxlib.util.SysUtil;
+import com.umeng.openim.OpenIMAgent;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.support.multidex.MultiDexApplication;
+
+public class BaiGuoApplication extends MultiDexApplication {
+
+	private static Context sContext;
+	public String User_doctor = "";
+
+	public static Context getContext() {
+		return sContext;
+	}
+
+	@Override
+	public void onCreate() {
+		// todo
+		// Application.onCreate锟叫ｏ拷锟斤拷锟斤拷执锟斤拷锟解部锟街达拷锟诫，锟斤拷锟铰达拷锟斤拷潭锟斤拷诖舜锟斤拷锟斤拷锟揭拷亩锟斤拷锟斤拷锟斤拷锟絩eturn锟斤拷为锟斤拷锟剿筹拷Application.onCreate锟斤拷锟斤拷锟斤拷
+		if (mustRunFirstInsideApplicationOnCreate()) {
+			// todo
+			// 锟斤拷锟斤拷锟�:TCMSSevice"锟斤拷锟斤拷锟叫ｏ拷锟斤拷锟斤拷锟斤拷锟給penIM锟斤拷app业锟斤拷某锟绞硷拷锟斤拷锟斤拷越锟绞★拷诖锟�
+			return;
+		}
+
+		// 锟斤拷始锟斤拷锟斤拷锟斤拷SDK
+		InitHelper.initYWSDK(this);
+		OpenIMAgent im = OpenIMAgent.getInstance(this);
+		im.init();
+
+	}
+
+	private boolean mustRunFirstInsideApplicationOnCreate() {
+		// 锟斤拷锟斤拷某锟绞硷拷锟�
+		SysUtil.setApplication(this);
+		sContext = getApplicationContext();
+		return SysUtil.isTCMSServiceProcess(sContext);
+	}
+
+	public void WriteSetting(boolean flag, boolean isNewVersion) {
+		SharedPreferences pref = getSharedPreferences("setting_info",
+				MODE_PRIVATE);
+		SharedPreferences.Editor sharedata = pref.edit();
+		sharedata.putBoolean("first_load", flag);
+		sharedata.putBoolean("new_version", isNewVersion);
+		sharedata.putString("version_code", API.version);
+		sharedata.commit();
+	}
+
+}

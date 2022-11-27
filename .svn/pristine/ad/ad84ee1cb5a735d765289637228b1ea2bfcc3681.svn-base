@@ -1,0 +1,11 @@
+eclipse.preferences.version=1
+encoding//src/com/mimi/baiguo/BaiGuoApplication.java=UTF-8
+encoding//src/com/mimi/baiguo/InitHelper.java=GBK
+encoding//src/com/mimi/baiguo/function/me/AboutUsActivity.java=UTF-8
+encoding//src/com/mimi/baiguo/main/FourFragment.java=UTF-8
+encoding//src/com/mimi/baiguo/sample/CustomSampleHelper.java=UTF-8
+encoding//src/com/mimi/baiguo/sample/LoginSampleHelper.java=UTF-8
+encoding//src/com/mimi/baiguo/stepcounter/BootBroadcastReceiver.java=GBK
+encoding//src/com/mimi/baiguo/yindaoye=UTF-8
+encoding//src/com/mimi/baiguo/yindaoye/SwitchActivity.java=UTF-8
+encoding/<project>=UTF-8

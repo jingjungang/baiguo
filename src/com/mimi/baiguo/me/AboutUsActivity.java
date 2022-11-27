@@ -1,0 +1,127 @@
+package com.mimi.baiguo.me;
+
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.View.OnClickListener;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
+import com.mimi.baiguo.API;
+import com.mimi.baiguo.R;
+import com.mimi.baiguo.util.JudgeInternet;
+import com.mimi.baiguo.util.SystemBarTintManager;
+
+/***
+ * 关于我们
+ * @author BBB
+ *
+ */
+public class AboutUsActivity extends Activity {
+	private TextView tv_title;
+	private WebView wv_about_us;
+	private ImageButton ib_left_handle01;
+	private static SystemBarTintManager tintManager;
+	String Url=API.ABOUT_US_URL;
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		tintManager = new SystemBarTintManager(this);
+		tintManager.setStatusBarTintEnabled(true);
+		tintManager.setStatusBarTintResource(R.color.common_theme);
+		setContentView(R.layout.activity_about_us);
+		init();
+		
+	}
+	
+	private void init(){
+		tv_title=(TextView)findViewById(R.id.tv_title);
+		wv_about_us=(WebView)findViewById(R.id.wv_about_us);
+		tv_title.setText(R.string.aboutus);
+		ib_left_handle01 = (ImageButton) findViewById(R.id.ib_left_handle01);
+		ib_left_handle01.setBackgroundResource(R.drawable.back_a_normal2x);
+		ib_left_handle01.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
+	}
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		if(JudgeInternet.isNetworkAvailable(AboutUsActivity.this)){
+			initWebView();
+		}
+		super.onStart();
+	}
+	/**
+	 * 初始化webview
+	 */
+	private void initWebView() {
+		// 支持缩放
+		wv_about_us.getSettings().setBuiltInZoomControls(true);
+		wv_about_us.getSettings().setSaveFormData(true);
+		wv_about_us.clearCache(false);
+        // 联网载入
+		wv_about_us.loadUrl(Url);
+		// 设置
+		wv_about_us.setWebViewClient(new WebViewClient() {
+
+			/** 开始载入页面 */
+			@Override
+			public void onPageStarted(WebView view, String url, Bitmap favicon) {
+				setProgressBarIndeterminateVisibility(true);// 设置标题栏的滚动条开始
+				Log.d("YM", "setProgressBarIndeterminateVisibility");
+				Url = url;
+				super.onPageStarted(view, url, favicon);
+			}
+
+			/** 捕获点击事件*/
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				wv_about_us.loadUrl(url);
+				return true;
+			}
+
+			/** 错误返回 */
+			@Override
+			public void onReceivedError(WebView view, int errorCode,
+					String description, String failingUrl) {
+				super.onReceivedError(view, errorCode, description, failingUrl);
+			}
+
+			/** 页面载入完毕 */
+			@Override
+			public void onPageFinished(WebView view, String url) {
+				setProgressBarIndeterminateVisibility(false);//ֹ
+				super.onPageFinished(view, url);
+			}
+
+		});
+
+		wv_about_us.setWebChromeClient(new WebChromeClient() {
+			/** 进度条变化 */
+			public void onProgressChanged(WebView view, int newProgress) {
+				// 设置标题栏的滚动条停止
+				getWindow().setFeatureInt(
+						Window.FEATURE_PROGRESS, newProgress * 100);
+				super.onProgressChanged(view, newProgress);
+			}
+
+			/** 设置标题 */
+			public void onReceivedTitle(WebView view, String title) {
+//				WebViewApp.this.setTitle(title);
+				super.onReceivedTitle(view, title);
+			}
+		});
+	}
+}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center"
+        android:layout_marginLeft="20dp"
+        android:layout_weight="9"
+        android:background="@drawable/question"
+        android:gravity="left|center"
+        android:minHeight="45dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="嗯嗯，您说。鉴于你这种情况的患者，我见过很多了，我的建议是先办理住院，然后进行诊疗" />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:src="@drawable/icon_man" />
+
+</LinearLayout>

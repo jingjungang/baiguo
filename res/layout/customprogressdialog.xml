@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:orientation="horizontal">
+  <RelativeLayout 
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center">
+       <ImageView
+           android:layout_centerHorizontal="true"
+        android:id="@+id/loadingImageView"
+       	android:layout_width="80dp"
+       	android:layout_height="80dp"
+       	android:background="@anim/progress_round"/>
+    <TextView
+        android:text="玩命加载中..."
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/loadingImageView"
+        android:id="@+id/id_tv_loadingmsg"
+        android:layout_width="wrap_content"
+       	android:layout_height="wrap_content"
+       	android:textSize="11.0sp"/>
+  </RelativeLayout>
+  
+   <!--  <ImageView
+        android:id="@+id/loadingImageView"
+       	android:layout_width="wrap_content"
+       	android:layout_height="wrap_content"
+       	android:background="@anim/progress_round"/>
+    <TextView
+        
+        android:id="@+id/id_tv_loadingmsg"
+        android:layout_width="wrap_content"
+       	android:layout_height="wrap_content"
+       	android:layout_gravity="center_vertical"
+       	android:textSize="12.0sp"/> -->
+</LinearLayout>

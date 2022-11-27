@@ -1,0 +1,162 @@
+package com.mimi.baiguo.function.mydoctor;
+
+/**
+ * 网络咨询
+ * 2016年5月24日 09:49:50
+ */
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.mimi.baiguo.API;
+import com.mimi.baiguo.R;
+import com.mimi.baiguo.activity.LoginActivity;
+import com.mimi.baiguo.util.SystemBarTintManager;
+import com.mimi.baiguo.util.URLConnectionUtil;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class NetworkConsultingActivity extends Activity implements
+		OnClickListener {
+
+	private TextView tv_title;
+	private ImageButton ib_left_handle01;
+	private ImageButton commit_btn;
+	private EditText network_title;
+	private EditText network_bingqingmiaoshu;
+	private EditText network_huayanjieguo;
+	private EditText network_zhiliaoqingkuang;
+	private EditText network_huodebangzhu;
+
+	String id;
+	String result;
+	private static SystemBarTintManager tintManager;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		// getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+		tintManager = new SystemBarTintManager(this);
+		tintManager.setStatusBarTintEnabled(true);
+		tintManager.setStatusBarTintResource(R.color.common_theme);
+		setContentView(R.layout.network_layout);
+		init();
+		super.onCreate(savedInstanceState);
+	}
+
+	private void init() {
+		tv_title = (TextView) findViewById(R.id.tv_title);
+		ib_left_handle01 = (ImageButton) findViewById(R.id.ib_left_handle01);
+		commit_btn = (ImageButton) findViewById(R.id.commit_btn);
+		network_title = (EditText) findViewById(R.id.network_title);
+		network_bingqingmiaoshu = (EditText) findViewById(R.id.network_bingqingmiaoshu);
+		network_huayanjieguo = (EditText) findViewById(R.id.network_huayanjieguo);
+		network_zhiliaoqingkuang = (EditText) findViewById(R.id.network_zhiliaoqingkuang);
+		network_huodebangzhu = (EditText) findViewById(R.id.network_huodebangzhu);
+
+		tv_title.setText("网络咨询");
+		ib_left_handle01.setBackgroundResource(R.drawable.back_a_normal2x);
+		ib_left_handle01.setOnClickListener(this);
+		commit_btn.setOnClickListener(this);
+
+		Intent intent = getIntent();
+		Bundle b = intent.getExtras();
+		id = b.getString("id");
+	}
+
+	@Override
+	public void onClick(View arg0) {
+		// TODO Auto-generated method stub
+		switch (arg0.getId()) {
+		case R.id.ib_left_handle01:
+			finish();
+			break;
+		case R.id.commit_btn:
+			String title = network_title.getText().toString();
+			if (title.equals("") || title == null) {
+				Toast.makeText(NetworkConsultingActivity.this, "标题不能为空",
+						Toast.LENGTH_SHORT).show();
+				return;
+			}
+			LoginActivity.startProgressDialog(this);
+			commit();
+			break;
+		}
+	}
+
+	/** 提交咨询问题 */
+	public void commit() {
+
+		final Handler handler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				LoginActivity.stopProgressDialog();
+				try {
+					JSONObject json = new JSONObject(result);
+					switch (json.getInt("status")) {
+					case -1:
+						Toast.makeText(NetworkConsultingActivity.this, "提交失败",
+								Toast.LENGTH_SHORT).show();
+						break;
+					case 0:
+						Toast.makeText(NetworkConsultingActivity.this, "提交异常",
+								Toast.LENGTH_SHORT).show();
+						break;
+					case 1:
+						Toast.makeText(NetworkConsultingActivity.this, "提交成功",
+								Toast.LENGTH_SHORT).show();
+						network_title.setText("");
+						network_bingqingmiaoshu.setText("");
+						network_huayanjieguo.setText("");
+						network_zhiliaoqingkuang.setText("");
+						network_huodebangzhu.setText("");
+						finish();
+						break;
+					}
+
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
+		new Thread() {
+			public void run() {
+				List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+				parameters.add(new BasicNameValuePair("token", API.getToken()));
+				parameters.add(new BasicNameValuePair("did", id));
+				parameters.add(new BasicNameValuePair("title", network_title
+						.getText().toString().trim()));
+				parameters.add(new BasicNameValuePair("content1",
+						network_bingqingmiaoshu.getText().toString().trim()));
+				parameters.add(new BasicNameValuePair("content2",
+						network_huayanjieguo.getText().toString().trim()));
+				parameters.add(new BasicNameValuePair("content3",
+						network_zhiliaoqingkuang.getText().toString().trim()));
+				parameters.add(new BasicNameValuePair("content4",
+						network_huodebangzhu.getText().toString().trim()));
+				result = URLConnectionUtil.HttpClientPost(API.ADD_QUIZ_URL,
+						parameters);
+				Message m = new Message();
+				m.what = 1;
+				handler.sendMessage(m);
+			}
+		}.start();
+	}
+}

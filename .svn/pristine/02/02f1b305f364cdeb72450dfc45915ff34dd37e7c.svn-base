@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mimi.baiguo"
+    android:versionCode="110"
+    android:versionName="1.1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="16"
+        android:targetSdkVersion="21" />
+
+    <!-- 友盟 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:name=".BaiGuoApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_logo"
+        android:label="@string/app_name"
+        android:theme="@style/FullBleedTheme" >
+
+        <!-- 首页界面 -->
+        <activity
+            android:name=".activity.IndexActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 索引页面 -->
+        <activity
+            android:name=".yindaoye.SwitchActivity"
+            android:hardwareAccelerated="false" />
+        <!-- 主界面 -->
+        <activity
+            android:name="com.mimi.baiguo.main.MainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <!-- 登陆界面 -->
+        <activity
+            android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <!-- 注册界面 -->
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <!-- 用户中心 -->
+        <activity
+            android:name="com.mimi.baiguo.function.me.UserCenterActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <!-- 患者基本信息 -->
+        <activity
+            android:name="com.mimi.baiguo.function.me.UserInfosActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <!-- 患者病例 -->
+        <activity
+            android:name=".activity.UserCasesActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <!-- 实验室检查 -->
+        <activity
+            android:name=".activity.TestsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <!-- 随访通知 -->
+        <activity
+            android:name=".activity.VisitInfomActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <!-- 修改密码 -->
+        <activity
+            android:name="com.mimi.baiguo.function.me.ModiPwdActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <!-- 意见反馈 -->
+        <activity
+            android:name="com.mimi.baiguo.function.me.FeedBackActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <!-- 关于我们 -->
+        <activity
+            android:name="com.mimi.baiguo.function.me.AboutUsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <!-- 资讯详细列表 -->
+        <activity
+            android:name="com.mimi.baiguo.function.news.NewsInfosActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <!-- 医生详情 -->
+        <activity
+            android:name=".activity.MessageUI"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <!-- 找回密码 -->
+        <activity
+            android:name=".activity.GetPasswordActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+
+        <!-- 互动详情 -->
+        <activity
+            android:name="com.mimi.baiguo.function.mydoctor.InteractionDetailsActivity"
+            android:label="@string/title_activity_interaction_details"
+            android:windowSoftInputMode="stateUnchanged" >
+        </activity>
+
+        <!-- 我的医生 -->
+        <activity
+            android:name="com.mimi.baiguo.function.mydoctor.DoctorDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <!-- 网络咨询 -->
+        <activity
+            android:name="com.mimi.baiguo.function.mydoctor.NetworkConsultingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <!-- 知识详情 -->
+        <activity
+            android:name="com.mimi.baiguo.function.mydoctor.KnowledgeDetailsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateUnchanged" />
+        <!-- 友盟 -->
+        <activity
+            android:name="com.alibaba.mobileim.ui.multi.lightservice.MultiPickGalleryActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.alibaba.mobileim.kit.imageviewer.ShowImageActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.alibaba.mobileim.ui.WxChattingActvity"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.alibaba.mobileim.ui.WxConversationActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.alibaba.mobileim.ui.chat.MultiImageActivity"
+            android:hardwareAccelerated="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="sensor"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.alibaba.mobileim.ui.chat.MonitorActivity"
+            android:hardwareAccelerated="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="sensor"
+            android:windowSoftInputMode="adjustPan" />
+
+        <service
+            android:name="com.alibaba.tcms.service.TCMSService"
+            android:exported="true"
+            android:process=":TcmsService" />
+        <!-- 用于接收从TCMSService发送的命令 -->
+        <service
+            android:name="com.alibaba.tcms.service.ListenerService"
+            android:exported="true" />
+        <!-- 友盟自动更新 -->
+        <service
+            android:name="com.umeng.update.net.DownloadingService"
+            android:process=":DownloadingService" >
+        </service>
+
+        <activity
+            android:name="com.alibaba.tcms.service.MonitorActivity"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:process=":TcmsService"
+            android:theme="@android:style/Theme.Translucent" />
+        <activity
+            android:name="com.umeng.update.UpdateDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="Umeng" >
+        </meta-data>
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="@string/umeng_appkey" >
+        </meta-data>
+        <meta-data
+            android:name="APP_KEY"
+            android:value="@string/app_key" >
+        </meta-data>
+    </application>
+
+</manifest>

@@ -1,0 +1,413 @@
+package com.mimi.baiguo.activity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.alibaba.mobileim.IYWLoginService;
+import com.alibaba.mobileim.YWAPI;
+import com.alibaba.mobileim.YWIMKit;
+import com.alibaba.mobileim.YWLoginParam;
+import com.alibaba.mobileim.channel.event.IWxCallback;
+import com.mimi.baiguo.API;
+import com.mimi.baiguo.BaiGuoApplication;
+import com.mimi.baiguo.R;
+import com.mimi.baiguo.main.MainActivity;
+import com.mimi.baiguo.sample.LoginSampleHelper;
+import com.mimi.baiguo.util.CustomProgressDialog;
+import com.mimi.baiguo.util.JudgeInternet;
+import com.mimi.baiguo.util.SystemBarTintManager;
+import com.mimi.baiguo.util.URLConnectionUtil;
+import com.umeng.analytics.MobclickAgent;
+
+/**
+ * 登陆界面
+ * */
+public class LoginActivity extends Activity implements OnClickListener {
+
+	private static CustomProgressDialog progressDialog = null;
+	private Button btn_login;// 登陆按钮
+	private EditText et_username;// 用户名
+	private EditText et_password;// 密码
+	private TextView tv_guest;// 游客账号
+	private TextView tv_register;// 注册账号
+	private TextView get_password;// 找回密码
+
+	private String token;
+
+	private String str_username, str_password;
+	private String y_name, y_password;
+	private String Url = API.USER_LOGIN_URL;
+	private Intent intent;
+	String result;
+	/** 登录状态标识，false代表没登录，true代表已经登录 */
+	String loginstate;
+	private static SystemBarTintManager tintManager;
+
+	/** 友盟 */
+	public static YWIMKit mIMKit;
+
+	private static LoginActivity sInstance = new LoginActivity();
+
+	public static LoginActivity getInstance() {
+		return sInstance;
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		// getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+		tintManager = new SystemBarTintManager(this);
+		tintManager.setStatusBarTintEnabled(true);
+		tintManager.setStatusBarTintResource(R.color.common_theme);
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_login);
+
+		// 只在第一次的时候获取一次联系人
+		SharedPreferences sp = getSharedPreferences("first",
+				Context.MODE_APPEND);
+		String first = sp.getString("first", "");
+		if (!first.equals("true")) {
+			IndexActivity.getConnectors(LoginActivity.this);
+		}
+
+		init();
+		loginOut_Sample();
+
+		str_username = et_username.getText().toString();
+		str_password = et_password.getText().toString();
+		if (JudgeInternet.isNetworkAvailable(LoginActivity.this)) {
+			// startProgressDialog(this);
+			logins();
+		}
+	}
+
+	private void init() {
+		et_username = (EditText) findViewById(R.id.et_username);
+		et_password = (EditText) findViewById(R.id.et_password);
+		btn_login = (Button) findViewById(R.id.btn_login);
+		tv_guest = (TextView) findViewById(R.id.tv_guest);
+		tv_register = (TextView) findViewById(R.id.tv_register);
+		get_password = (TextView) findViewById(R.id.get_password);
+		btn_login.setOnClickListener(this);
+		tv_guest.setOnClickListener(this);
+		tv_register.setOnClickListener(this);
+		get_password.setOnClickListener(this);
+
+		SharedPreferences sp = getSharedPreferences("username",
+				Activity.MODE_MULTI_PROCESS);
+		String name = sp.getString("username", "");
+		sp = getSharedPreferences("password", Activity.MODE_MULTI_PROCESS);
+		String password = sp.getString("password", "");
+		if (name != null && password != null) {
+			et_username.setText(name);
+			et_password.setText(password);
+		}
+	}
+
+	@Override
+	public void onClick(View arg0) {
+		switch (arg0.getId()) {
+		case R.id.btn_login:
+			if ("".equals(et_username.getText().toString()) == false
+					&& "".equals(et_password.getText().toString()) == false) {
+				str_username = et_username.getText().toString();
+				str_password = et_password.getText().toString();
+				if (JudgeInternet.isNetworkAvailable(LoginActivity.this)) {
+					startProgressDialog(this);
+					loginOut_Sample();
+					logins();
+				}
+
+			} else {
+				Toast.makeText(LoginActivity.this, "用户名和密码不能为空",
+						Toast.LENGTH_SHORT).show();
+			}
+			break;
+		case R.id.tv_guest:
+			API.setYouke("游客账号");
+			YWIMKit mIMKit = null;
+			LoginSampleHelper.getInstance().setIMKit(mIMKit);
+			SharedPreferences sharedPreferences = getSharedPreferences(
+					"loginstate", Activity.MODE_MULTI_PROCESS);
+			SharedPreferences.Editor editor = sharedPreferences.edit();
+			editor.putString("loginstate", "false");
+			editor.commit();
+			intent = new Intent(LoginActivity.this, MainActivity.class);
+			startActivity(intent);
+			finish();
+			break;
+		case R.id.tv_register:
+			intent = new Intent(this, RegisterActivity.class);
+			startActivity(intent);
+			break;
+		case R.id.get_password:
+			intent = new Intent(this, GetPasswordActivity.class);
+			startActivity(intent);
+			break;
+		}
+	}
+
+	private void init(String userId, String appKey) {
+		// 初始化imkit
+		LoginSampleHelper.getInstance().initIMKit(userId, appKey);
+		// 自定义头像和昵称回调初始化(如果不需要自定义头像和昵称，则可以省去)
+		// UserProfileSampleHelper.initProfileCallback();
+		// 通知栏相关的初始化
+		// NotificationInitSampleHelper.init();
+
+	}
+
+	/* *友盟账号登陆方式 */
+	public void login(String userId, String password) {
+
+		// MobclickAgent.setScenarioType(LoginActivity.this,
+		// EScenarioType.E_UM_NORMAL);
+		// android.telephony.TelephonyManager tm =
+		// (android.telephony.TelephonyManager)
+		// getSystemService(Context.TELEPHONY_SERVICE);
+		// String temp = tm.getDeviceId();
+		// if (!TextUtils.isEmpty(temp)) {
+		// MobclickAgent.onProfileSignIn(temp);
+		// }
+		Double a = Math.random();
+		int b = (int) (a * 100);
+		// MobclickAgent.onProfileSignIn(b + "");
+
+		init(userId, getString(R.string.app_key));
+		mIMKit = YWAPI.getIMKitInstance();
+
+		IYWLoginService loginService = mIMKit.getLoginService();
+		YWLoginParam loginParam = YWLoginParam.createLoginParam(userId,
+				password);
+		loginService.login(loginParam, new IWxCallback() {
+			@Override
+			public void onSuccess(Object... arg0) {
+				stopProgressDialog();
+				Toast.makeText(getApplicationContext(), "登陆成功",
+						Toast.LENGTH_LONG).show();
+				Intent intent = new Intent(getApplicationContext(),
+						MainActivity.class);
+				startActivity(intent);
+				API.setYouke("123");
+				finish();
+			}
+
+			@Override
+			public void onProgress(int arg0) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void onError(int errCode, String description) {
+				// 如果登录失败，errCode为错误码,description是错误的具体描述信息
+				stopProgressDialog();
+				Toast.makeText(LoginActivity.this, "登陆失败" + description,
+						Toast.LENGTH_LONG).show();
+			}
+		});
+	}
+
+	/** 白果登陆 */
+	public void logins() {
+
+		final Handler handler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				if (msg.what == 1) {
+					try {
+						if (result != null) {
+							JSONObject jo = new JSONObject(result);
+							int status = jo.getInt("status");
+							if (status == -1) {
+								Toast.makeText(LoginActivity.this, "手机号格式错误",
+										Toast.LENGTH_SHORT).show();
+								stopProgressDialog();
+							} else if (status == -3) {
+								Toast.makeText(LoginActivity.this, "手机号未注册",
+										Toast.LENGTH_SHORT).show();
+								stopProgressDialog();
+							} else if (status == -4) {
+								Toast.makeText(LoginActivity.this, "密码错误",
+										Toast.LENGTH_SHORT).show();
+								stopProgressDialog();
+							} else if (status == -5) {
+								Toast.makeText(LoginActivity.this, "登陆失败",
+										Toast.LENGTH_SHORT).show();
+								stopProgressDialog();
+							} else if (status == 1) {
+								// Toast.makeText(LoginActivity.this,
+								// "登陆成功",Toast.LENGTH_SHORT).show();
+
+								// 将登陆状态保存
+								SharedPreferences sharedPreferences = getSharedPreferences(
+										"loginstate",
+										Activity.MODE_MULTI_PROCESS);
+								SharedPreferences.Editor editor = sharedPreferences
+										.edit();
+								editor.putString("loginstate", "true");
+								editor.commit();
+								// 将帐号保存
+								SharedPreferences sharedPreferences2 = getSharedPreferences(
+										"username", Activity.MODE_MULTI_PROCESS);
+								SharedPreferences.Editor editor2 = sharedPreferences2
+										.edit();
+								editor2.putString("username", et_username
+										.getText().toString());
+								editor2.commit();
+								// 将密码保存
+								SharedPreferences sharedPreferences3 = getSharedPreferences(
+										"password", Activity.MODE_MULTI_PROCESS);
+								SharedPreferences.Editor editor3 = sharedPreferences3
+										.edit();
+								editor3.putString("password", et_password
+										.getText().toString());
+								editor3.commit();
+								JSONObject joi = jo.getJSONObject("into");
+								String mobile = joi.getString("mobile");
+								String sex = joi.getString("sex");
+								((BaiGuoApplication) getApplication()).User_doctor = joi
+										.has("doctor_id") ? joi
+										.getString("doctor_id") : "";
+								// 将手机号保存
+								SharedPreferences sharedPreferences4 = getSharedPreferences(
+										"mobile", Activity.MODE_MULTI_PROCESS);
+								SharedPreferences.Editor editor4 = sharedPreferences4
+										.edit();
+								editor4.putString("mobile", mobile);
+								editor4.commit();
+								// 将性别保存
+								SharedPreferences sharedPreferences5 = getSharedPreferences(
+										"sex", Activity.MODE_MULTI_PROCESS);
+								SharedPreferences.Editor editor5 = sharedPreferences5
+										.edit();
+								editor5.putString("sex", sex);
+								editor5.commit();
+
+								// token保存登陆状态，方便以后数据访问
+								token = joi.getString("token");
+								API.setToken(token);
+
+								y_name = joi.getString("yname");
+								API.setYMuserid(y_name);
+								y_password = joi.getString("ypassword");
+								API.UserId = joi.getString("userid");
+								API.avatar_address = joi.getString("avatar");
+								// login(y_name, y_password);
+								Intent intent = new Intent(
+										getApplicationContext(),
+										MainActivity.class);
+								startActivity(intent);
+								API.setYouke("123");
+								finish();
+							} else {
+								stopProgressDialog();
+								Toast.makeText(LoginActivity.this, "登陆异常",
+										Toast.LENGTH_SHORT).show();
+							}
+						} else {
+							stopProgressDialog();
+							Toast.makeText(LoginActivity.this, "登陆异常",
+									Toast.LENGTH_SHORT).show();
+						}
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						stopProgressDialog();
+						Toast.makeText(LoginActivity.this, "登陆异常",
+								Toast.LENGTH_SHORT).show();
+					}
+				}
+			}
+		};
+		new Thread() {
+			public void run() {
+				List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+				parameters.add(new BasicNameValuePair("mobile", str_username));
+				parameters.add(new BasicNameValuePair("type", "2"));
+				parameters
+						.add(new BasicNameValuePair("password", str_password));
+				result = URLConnectionUtil.HttpClientPost(Url, parameters);
+				Message m = new Message();
+				m.what = 1;
+				handler.sendMessage(m);
+			}
+		}.start();
+	}
+
+	/**
+	 * 友盟登出
+	 */
+	public void loginOut_Sample() {
+		if (mIMKit == null) {
+			return;
+		}
+
+		// openIM SDK提供的登录服务
+		IYWLoginService mLoginService = mIMKit.getLoginService();
+		mLoginService.logout(new IWxCallback() {
+
+			@Override
+			public void onSuccess(Object... arg0) {
+
+			}
+
+			@Override
+			public void onProgress(int arg0) {
+
+			}
+
+			@Override
+			public void onError(int arg0, String arg1) {
+
+			}
+		});
+	}
+
+	public static void startProgressDialog(Context context) {
+		if (progressDialog == null) {
+			progressDialog = CustomProgressDialog.createDialog(context);
+			progressDialog.setMessage("加载中···");
+		}
+
+		progressDialog.show();
+	}
+
+	public static void stopProgressDialog() {
+		if (progressDialog != null) {
+			progressDialog.dismiss();
+			progressDialog = null;
+		}
+	}
+
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart("LoginActivity"); // 统计页面(仅有Activity的应用中SDK自动调用，不需要单独写)
+		MobclickAgent.onResume(this); // 统计时长
+	}
+
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd("LoginActivity"); // （仅有Activity的应用中SDK自动调用，不需要单独写）
+		MobclickAgent.onPause(this);
+	}
+}

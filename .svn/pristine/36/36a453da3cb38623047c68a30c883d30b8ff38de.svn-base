@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_gray"
+    android:orientation="vertical" >
+
+    <!-- 联系人详细信息 -->
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal" >
+
+        <com.mimi.baiguo.widget.imageview.CircularImage
+            android:id="@+id/iv_contacts_thumb"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/no_pic" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_toRightOf="@+id/iv_contacts_thumb"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tv_contacts_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:ellipsize="end"
+                android:textSize="18.0sp" />
+
+            <TextView
+                android:id="@+id/tv_contacts_section"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:textSize="14.0sp" />
+
+            <ImageView
+                android:id="@+id/tv_contacts_ico"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/hos_icon" />
+
+            <TextView
+                android:id="@+id/tv_contacts_hospital"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:textSize="14.0sp" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/tv_contacts_ask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/ask" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_contacts_infos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

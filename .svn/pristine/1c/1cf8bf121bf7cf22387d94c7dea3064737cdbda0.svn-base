@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android_custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/common_background"
+    android:orientation="vertical" >
+<!-- 患者病例 -->
+    <include
+        android:id="@+id/line_title_detail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        layout="@layout/common_top" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:fadingEdge="none"
+                android:scrollbars="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+                    <!-- 添加时间 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dip" >
+
+                        <TextView
+                            style="@style/black_16_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dip"
+                            android:text="@string/add_time" />
+
+                        <TextView
+                            android:id="@+id/tv_add_time"
+                            style="@style/gray_16_style"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="10dip"
+                            android:layout_weight="1"
+                            android:background="@drawable/et_border_bottom" />
+                    </LinearLayout>
+                    <!-- 更新时间 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dip" >
+
+                        <TextView
+                            style="@style/black_16_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dip"
+                            android:text="@string/update_time" />
+
+                        <TextView
+                            android:id="@+id/tv_update_time"
+                            style="@style/gray_16_style"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="10dip"
+                            android:layout_weight="1"
+                            android:background="@drawable/et_border_bottom" />
+                    </LinearLayout>
+              
+                    <!-- 是否饮酒 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dip" >
+
+                        <TextView
+                            style="@style/black_16_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dip"
+                            android:text="@string/drink" />
+
+                        <TextView
+                            android:id="@+id/tv_drink"
+                            style="@style/gray_16_style"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="10dip"
+                            android:layout_weight="1"
+                            android:background="@drawable/et_border_bottom" />
+                    </LinearLayout>
+
+                    <!-- 饮酒频率 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dip" >
+
+                        <TextView
+                            style="@style/black_16_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dip"
+                            android:text="@string/drinknumber" />
+
+                        <TextView
+                            android:id="@+id/tv_drinktime"
+                            style="@style/gray_16_style"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="10dip"
+                            android:layout_weight="1"
+                            android:background="@drawable/et_border_bottom" />
+                    </LinearLayout>
+
+                    <!-- 每次饮酒量 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dip" >
+
+                        <TextView
+                            style="@style/black_16_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dip"
+                            android:text="@string/drinknumber" />
+
+                        <TextView
+                            android:id="@+id/tv_drinknumber"
+                            style="@style/gray_16_style"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="10dip"
+                            android:layout_weight="1"
+                            android:background="@drawable/et_border_bottom" />
+                    </LinearLayout>
+
+                    <!-- 酒精度数 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dip" >
+
+                        <TextView
+                            style="@style/black_16_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dip"
+                            android:text="@string/drinkdegree" />
+
+                        <TextView
+                            android:id="@+id/tv_drinkdegree"
+                            style="@style/gray_16_style"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="10dip"
+                            android:layout_weight="1"
+                            android:background="@drawable/et_border_bottom"
+                            android:text="" />
+                    </LinearLayout>
+
+                    <!-- 过敏史 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dip" >
+
+                        <TextView
+                            style="@style/black_16_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dip"
+                            android:text="@string/allergy" />
+
+                        <TextView
+                            android:id="@+id/tv_allergy"
+                            style="@style/gray_16_style"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="10dip"
+                            android:layout_weight="1"
+                            android:background="@drawable/et_border_bottom" />
+                    </LinearLayout>
+
+                    <!-- 添加过敏史 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dip" >
+
+                        <TextView
+                            style="@style/black_16_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dip"
+                            android:text="@string/allergys" />
+
+                        <TextView
+                            android:id="@+id/tv_allergys"
+                            style="@style/gray_16_style"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="10dip"
+                            android:layout_weight="1"
+                            android:background="@drawable/et_border_bottom" />
+                    </LinearLayout>
+
+                    <!-- 手术史 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dip" >
+
+                        <TextView
+                            style="@style/black_16_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dip"
+                            android:text="@string/operation" />
+
+                        <TextView
+                            android:id="@+id/tv_operation"
+                            style="@style/gray_16_style"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="10dip"
+                            android:layout_weight="1"
+                            android:background="@drawable/et_border_bottom" />
+                    </LinearLayout>
+
+                    <!-- 添加手术史 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dip" >
+
+                        <TextView
+                            style="@style/black_16_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dip"
+                            android:text="@string/operations" />
+
+                        <TextView
+                            android:id="@+id/tv_operations"
+                            style="@style/gray_16_style"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="10dip"
+                            android:layout_weight="1"
+                            android:background="@drawable/et_border_bottom"
+                            android:text="" />
+                    </LinearLayout>
+
+                    <!-- 输血史 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dip" >
+
+                        <TextView
+                            style="@style/black_16_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dip"
+                            android:text="@string/blood" />
+
+                        <TextView
+                            android:id="@+id/tv_blood"
+                            style="@style/gray_16_style"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="10dip"
+                            android:layout_weight="1"
+                            android:background="@drawable/et_border_bottom" />
+                    </LinearLayout>
+
+                    <!-- 添加输血史 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dip" >
+
+                        <TextView
+                            style="@style/black_16_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dip"
+                            android:text="@string/bloods" />
+
+                        <TextView
+                            android:id="@+id/tv_bloods"
+                            style="@style/gray_16_style"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="10dip"
+                            android:layout_weight="1"
+                            android:background="@drawable/et_border_bottom" />
+                    </LinearLayout>
+
+                    <!-- 家族史 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dip" >
+
+                        <TextView
+                            style="@style/black_16_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dip"
+                            android:text="@string/family" />
+
+                        <TextView
+                            android:id="@+id/tv_family"
+                            style="@style/gray_16_style"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="10dip"
+                            android:layout_weight="1"
+                            android:background="@drawable/et_border_bottom" />
+                    </LinearLayout>
+                    <!-- 药物临床试验史 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dip" >
+
+                        <TextView
+                            style="@style/black_16_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dip"
+                            android:text="@string/drug" />
+
+                        <TextView
+                            android:id="@+id/tv_drug"
+                            style="@style/gray_16_style"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="10dip"
+                            android:layout_weight="1"
+                            android:background="@drawable/et_border_bottom" />
+                    </LinearLayout>
+
+                    <!-- 添加药物临床试验史 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dip" >
+
+                        <TextView
+                            style="@style/black_16_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dip"
+                            android:text="@string/drugs" />
+
+                        <TextView
+                            android:id="@+id/tv_drugs"
+                            style="@style/gray_16_style"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="10dip"
+                            android:layout_weight="1"
+                            android:background="@drawable/et_border_bottom" />
+                    </LinearLayout>
+
+                    <!-- 是否参加药物临床试验史 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dip" >
+
+                        <TextView
+                            style="@style/black_16_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dip"
+                            android:text="@string/drugtest" />
+
+                        <TextView
+                            android:id="@+id/tv_drugtest"
+                            style="@style/gray_16_style"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="10dip"
+                            android:layout_weight="1"
+                            android:background="@drawable/et_border_bottom" />
+                    </LinearLayout>
+
+                    <!-- 参加药物临床试验史开始时间 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dip" >
+
+                        <TextView
+                            style="@style/black_16_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dip"
+                            android:text="@string/stime" />
+
+                        <TextView
+                            android:id="@+id/tv_stime"
+                            style="@style/gray_16_style"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="10dip"
+                            android:layout_weight="1"
+                            android:background="@drawable/et_border_bottom" />
+                    </LinearLayout>
+
+                    <!-- 参加药物临床试验史结束时间 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dip" >
+
+                        <TextView
+                            style="@style/black_16_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dip"
+                            android:text="@string/etime" />
+
+                        <TextView
+                            android:id="@+id/tv_etime"
+                            style="@style/gray_16_style"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="10dip"
+                            android:layout_weight="1"
+                            android:background="@drawable/et_border_bottom" />
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

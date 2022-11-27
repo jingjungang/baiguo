@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eef8e5"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/a1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        layout="@layout/common_top" />
+
+    <com.mimi.baiguo.util.MyGridView
+        android:id="@+id/zhishi_gv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/a1" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/zhishi_gv"
+        android:layout_gravity="top|center"
+        android:background="#e8ecd4" >
+
+        <com.mimi.baiguo.xlistview.XListView
+            android:id="@+id/zhishi_lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="36dp"
+            android:background="@color/transplant"
+            android:divider="#e8ecd4"
+            android:dividerHeight="1dp" />
+
+        <RelativeLayout
+            android:id="@+id/rl_hot"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_gravity="top|center"
+            android:background="@drawable/bg_little_green"
+            android:gravity="center"
+            android:clickable="true"
+            android:padding="5dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="15dp"
+                android:text="热点"
+                android:textColor="@color/white_color" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:text="更多>"
+                android:textColor="@color/white_color"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </FrameLayout>
+
+</RelativeLayout>

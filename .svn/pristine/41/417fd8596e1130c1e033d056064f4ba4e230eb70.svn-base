@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+    
+    <LinearLayout android:id="@+id/line_add_comment" 
+	        android:orientation="horizontal" 
+	        android:layout_width="match_parent" 
+	        android:layout_height="wrap_content" 
+	        android:background="@color/text_white" 
+	        android:paddingTop="5dip" 
+	        android:paddingBottom="5dip" 
+	        android:paddingLeft="15dip" 
+	        android:paddingRight="15dip" 
+	        android:gravity="center_vertical">
+	        <EditText 
+	            android:id="@+id/et_comment" 
+	            android:drawableLeft="@drawable/write_c" 
+	            android:drawablePadding="3dip" 
+	            android:layout_width="0dip" 
+	            android:layout_weight="1" 
+	            android:layout_height="wrap_content"
+	            android:textColor="@color/black" 
+	            android:background="@drawable/edit_bg" 
+	            android:maxLines="1"/>
+            <Button 
+                android:id="@+id/btn_comment" 
+                android:background="@drawable/but_bg_sel" 
+                android:text="评论" 
+                android:layout_width="wrap_content" 
+                android:layout_height="34dip"  
+                android:layout_marginLeft="10dip" 
+                style="@style/white_text_style_14"/>
+	    </LinearLayout>
+
+</RelativeLayout>

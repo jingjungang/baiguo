@@ -1,0 +1,401 @@
+package com.mimi.baiguo.function.me;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+
+import com.lidroid.xutils.http.RequestParams;
+import com.mimi.baiguo.API;
+import com.mimi.baiguo.R;
+import com.mimi.baiguo.activity.LoginActivity;
+import com.mimi.baiguo.util.AsyncLoadingImg;
+import com.mimi.baiguo.util.ContentUtils;
+import com.mimi.baiguo.util.FileUtils;
+import com.mimi.baiguo.util.SystemBarTintManager;
+import com.mimi.baiguo.util.XThread;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.MediaStore;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+/**
+ * 用户中心
+ */
+public class UserCenterActivity extends Activity implements OnClickListener {
+
+	private TextView tv_title;
+	private ImageButton ib_left_handle01;
+	/** 用户图像 */
+	private ImageView iv_cus_pic;
+	/** 用户名，版本显示号 */
+	private TextView tv_user_name, tv_version_code;
+	/** 修改密码，意见反馈，关于我们，版本号 */
+	private LinearLayout line_re_pwd, line_feedback, line_aboutus,
+			line_version;
+	/** 退出登录 */
+	private Button btn_logout;
+	private static SystemBarTintManager tintManager;
+	ImageLoader imageLoader;
+	String result;
+	String Url = API.USER_AVATAR_URL;
+	String token = API.getToken();
+	Handler handler;
+	Uri outputFileUri;
+	Intent intent;
+	private Bitmap avatorBitmap;
+	/* 头像名称 */
+	private static final String IMAGE_FILE_NAME = "faceImage.jpg";
+
+	private final int CONSULT_DOC_PICTURE = 1000; // 从图库中选择
+	private final int CONSULT_DOC_CAMERA = 1001; // 拍照
+	LinearLayout base_infos;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		tintManager = new SystemBarTintManager(this);
+		tintManager.setStatusBarTintEnabled(true);
+		tintManager.setStatusBarTintResource(R.color.common_theme);
+		// getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+		setContentView(R.layout.activity_user);
+
+		init();
+	}
+
+	public void init() {
+		iv_cus_pic = (ImageView) findViewById(R.id.iv_cus_pic);
+		tv_user_name = (TextView) findViewById(R.id.tv_user_name);
+		tv_version_code = (TextView) findViewById(R.id.tv_version_code);
+		line_re_pwd = (LinearLayout) findViewById(R.id.line_re_pwd);
+		line_feedback = (LinearLayout) findViewById(R.id.line_feedback);
+		line_aboutus = (LinearLayout) findViewById(R.id.line_aboutus);
+		line_version = (LinearLayout) findViewById(R.id.line_version);
+		btn_logout = (Button) findViewById(R.id.btn_logout);
+
+		iv_cus_pic.setOnClickListener(this);
+		tv_user_name.setOnClickListener(this);
+		line_re_pwd.setOnClickListener(this);
+		line_feedback.setOnClickListener(this);
+		line_aboutus.setOnClickListener(this);
+		line_version.setOnClickListener(this);
+		btn_logout.setOnClickListener(this);
+
+		tv_title = (TextView) findViewById(R.id.tv_title);
+		tv_title.setText("个人信息");
+		ib_left_handle01 = (ImageButton) findViewById(R.id.ib_left_handle01);
+		ib_left_handle01.setBackgroundResource(R.drawable.back_a_normal2x);
+		ib_left_handle01.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
+		tv_version_code.setText("当前版本：" + getString(R.string.version_info));
+		Intent intent = getIntent();
+		String avatar = intent.getStringExtra("avatar");
+		String userName = intent.getStringExtra("userName");
+		tv_user_name.setText(userName);
+		if (API.bitmap != null) {
+			iv_cus_pic.setImageBitmap(API.bitmap);
+		} else if (avatar != null && !avatar.equals("")) {
+			imageLoader = AsyncLoadingImg
+					.getImageLoader(UserCenterActivity.this);
+			imageLoader.displayImage(avatar, iv_cus_pic,
+					AsyncLoadingImg.getDefaultOptions());
+		} else {
+			iv_cus_pic.setImageResource(R.drawable.icon_man);
+		}
+
+		base_infos = (LinearLayout) findViewById(R.id.base_infos);
+		base_infos.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				if (!API.getYouke().equals("游客账号")) {
+					Intent intent = new Intent(UserCenterActivity.this,
+							UserInfosActivity.class);
+					startActivity(intent);
+
+				} else {
+					Toast.makeText(UserCenterActivity.this, "您目前使用的是游客账号，请登录！",
+							Toast.LENGTH_SHORT).show();
+					Intent intent = new Intent(UserCenterActivity.this,
+							LoginActivity.class);
+					startActivity(intent);
+				}
+			}
+		});
+	}
+
+	@Override
+	public void onClick(View arg0) {
+		// TODO Auto-generated method stub
+		switch (arg0.getId()) {
+		case R.id.iv_cus_pic:
+			showChoosePicDia();
+			break;
+		case R.id.tv_user_name:
+			break;
+		case R.id.line_re_pwd:
+			intent = new Intent(UserCenterActivity.this, ModiPwdActivity.class);
+			startActivity(intent);
+			break;
+		case R.id.line_feedback:
+			intent = new Intent(UserCenterActivity.this, FeedBackActivity.class);
+			startActivity(intent);
+			break;
+		case R.id.line_aboutus:
+			intent = new Intent(UserCenterActivity.this, AboutUsActivity.class);
+			startActivity(intent);
+			break;
+		case R.id.line_version:
+			break;
+		case R.id.btn_logout:
+			dialog();
+			break;
+		}
+	}
+
+	/** 退出登录提示 **/
+	private void dialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this); // 先得到构造器
+		builder.setTitle("提示"); // 设置标题
+		builder.setMessage("是否确认退出?"); // 设置内容
+		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() { // 设置确定按钮
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss(); // 关闭dialog
+						// 将登陆状态保存
+						SharedPreferences sharedPreferences = getSharedPreferences(
+								"loginstate", Activity.MODE_MULTI_PROCESS);
+						SharedPreferences.Editor editor = sharedPreferences
+								.edit();
+						editor.putString("loginstate", "false");
+						editor.commit();
+						new LoginActivity().loginOut_Sample();
+						Toast.makeText(UserCenterActivity.this, "退出登录成功",
+								Toast.LENGTH_SHORT).show();
+						Intent intent = new Intent(UserCenterActivity.this,
+								LoginActivity.class);
+						startActivity(intent);
+					}
+				});
+		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() { // 设置取消按钮
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+
+		// 参数都设置完成了，创建并显示出来
+		builder.create().show();
+	}
+
+	void showChoosePicDia() {
+		CharSequence[] items = { "相册", "相机"
+		// , "相册2"
+		};
+		AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle(
+				"选择").setItems(items, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				switch (which) {
+				case 0:
+					chooseImage();
+					break;
+				case 1:
+					goCamera();
+					break;
+				default:
+					break;
+				}
+			}
+		});
+		builder.show();
+	}
+
+	public void chooseImage() {
+		Intent intent = new Intent();
+		// 由于4.4后面action为ACTION_OPEN_DOCUMENT，由于当前开发的SDK版本不足4.4，为了兼容4.4及以后版本，采用这种方式
+		intent.setAction(Intent.ACTION_PICK);
+		// intent.setAction(Intent.ACTION_GET_CONTENT);
+		intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		// intent.setType("image/*");
+		startActivityForResult(Intent.createChooser(intent, "选择图片"),
+				CONSULT_DOC_PICTURE);
+	}
+
+	public void goCamera() {
+		String path = Environment.getExternalStorageDirectory()
+				+ File.separator + "YuYi" + File.separator + "temp";
+		File f = new File(path);
+		if (!f.exists()) {
+			f.mkdirs();
+		}
+		File file = new File(path, System.currentTimeMillis() + ".jpg");
+		outputFileUri = Uri.fromFile(file);
+
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+		startActivityForResult(intent, CONSULT_DOC_CAMERA);
+	}
+
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == 0)
+			return;
+		if (resultCode == -1) {
+			if (requestCode == CONSULT_DOC_PICTURE) {
+				if (data == null) {
+					return;
+				}
+				Uri uri = data.getData();
+				try {
+					String fileName = ContentUtils.getImageAbsolutePath(this,
+							uri);
+					String path = Environment.getExternalStorageDirectory()
+							+ File.separator + "BaiGuo" + File.separator
+							+ "temp";
+					File f = new File(path);
+					if (!f.exists()) {
+						f.mkdirs();
+					}
+					String newFileName = path + File.separator
+							+ System.currentTimeMillis() + ".jpg";
+					File sourceFile = new File(fileName);
+					File outFile = new File(newFileName);
+					FileUtils.fileChannelCopy(sourceFile, outFile);
+					FileUtils.copyFile(fileName, newFileName);
+					if (outFile.length() < 100) {
+						try {
+							outFile = sourceFile.createTempFile("temp", "");
+							FileUtils.copyFile(fileName,
+									outFile.getAbsolutePath());
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+					outputFileUri = Uri.fromFile(outFile);
+					avatorBitmap = getPicBitmap();
+					uploadImg();
+				} catch (Exception e) {
+					e.printStackTrace();
+					Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT)
+							.show();
+				}
+			} else if (requestCode == CONSULT_DOC_CAMERA) {
+				try {
+					avatorBitmap = getPicBitmap();
+					uploadImg();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private void uploadImg() {
+		RequestParams params = new RequestParams();
+		params.addHeader("Cookie", "");
+		params.addHeader("User-Agent", API.USER_AGENT);
+		params.addBodyParameter("token", API.getToken());
+		File f = new File(outputFileUri.getPath());
+		params.addBodyParameter("avatar", f);
+		params.addBodyParameter("type", "2");
+		XThread thread = new XThread(this, 0, params, Url, uploadHandler);
+		thread.setShowDia(true);
+		thread.start();
+	}
+
+	private Handler uploadHandler = new Handler() {
+
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO Auto-generated method stub
+			super.handleMessage(msg);
+			switch (msg.what) {
+			case 0:
+				String str = (String) msg.obj;
+				iv_cus_pic.setImageBitmap(avatorBitmap);
+				API.bitmap = avatorBitmap;
+				API.uploading = true;
+				Toast.makeText(UserCenterActivity.this, "上传成功",
+						Toast.LENGTH_SHORT).show();
+				break;
+			}
+		}
+	};
+
+	private Bitmap getPicBitmap() {
+		Bitmap bitmap = null;
+		try {
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			// 先设置为TRUE不加载到内存中，但可以得到宽和高
+			options.inJustDecodeBounds = true;
+			bitmap = BitmapFactory.decodeFile(outputFileUri.getPath(), options); // 此时返回bm为空
+			options.inJustDecodeBounds = false;
+			// 计算缩放比
+			int outW = options.outWidth > options.outHeight ? options.outWidth
+					: options.outHeight;
+			int be = (int) (outW / (float) (1024));
+			if (be <= 0)
+				be = 1;
+			options.inSampleSize = be;
+			// 这样就不会内存溢出了
+			bitmap = BitmapFactory.decodeFile(outputFileUri.getPath(), options);
+			BufferedOutputStream bos = null;
+			bos = new BufferedOutputStream(new FileOutputStream(
+					outputFileUri.getPath()));
+			bitmap.compress(CompressFormat.JPEG, 50, bos);
+			bos.flush();
+			bos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Toast.makeText(UserCenterActivity.this, e.getMessage(),
+					Toast.LENGTH_LONG).show();
+		}
+		return bitmap;
+	}
+
+	class BaseChange extends Thread {
+		public String file;
+
+		public BaseChange(String path) {
+			super();
+			this.file = path;
+		}
+
+		@Override
+		public void run() {
+			Message m = new Message();
+			m.what = 1;
+			// 发送消息到Handler
+			handler.sendMessage(m);
+		}
+
+	}
+
+}

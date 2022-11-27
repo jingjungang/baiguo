@@ -1,0 +1,163 @@
+package com.mimi.baiguo.employeecare;
+
+/**
+ * 跑步排行榜
+ * 景俊钢
+ * 2016年8月10日 09:50:30
+ */
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.mimi.baiguo.API;
+import com.mimi.baiguo.R;
+import com.mimi.baiguo.adapter.Rank_Adapter;
+import com.mimi.baiguo.util.AsyncLoadingImg;
+import com.mimi.baiguo.util.SystemBarTintManager;
+import com.mimi.baiguo.util.URLConnectionUtil;
+import com.mimi.baiguo.widget.imageview.CircularImage;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+public class Rank extends Activity implements OnClickListener {
+
+	ListView li;
+	ImageLoader imageLoader;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		SystemBarTintManager tintManager = new SystemBarTintManager(this);
+		tintManager.setStatusBarTintEnabled(true);
+		tintManager.setStatusBarTintResource(R.color.common_theme);
+
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_rank);
+
+		initview();
+
+		init();
+	}
+
+	private void init() {
+		// TODO Auto-generated method stub
+		imageLoader = AsyncLoadingImg.getImageLoader(getApplicationContext());
+		new getHotList().start();
+	}
+
+	String result = "";
+
+	class getHotList extends Thread {
+		@Override
+		public void run() {
+			// 请求网络
+			List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+			parameters.add(new BasicNameValuePair("token", API.token));
+			parameters.add(new BasicNameValuePair("page", "1"));
+			parameters.add(new BasicNameValuePair("pagesize", "30"));
+			try {
+				result = URLConnectionUtil.HttpClientPost(API.RANK, parameters);
+				Message m = new Message();
+				m.what = 1;
+				handler.sendMessage(m);
+			} catch (Exception e) {
+			}
+			super.run();
+		}
+	}
+
+	Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				if (!TextUtils.isEmpty(result)) {
+					JSONObject json;
+					try {
+						json = new JSONObject(result);
+						JSONArray js = json.getJSONArray("info");// temp
+						if (js != null) {
+							Rank_Adapter adapter = new Rank_Adapter(
+									getApplicationContext(), js);
+							li.setAdapter(adapter);
+						}
+						setMysteps(json.getJSONObject("temp"));
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				break;
+			}
+		}
+
+	};
+
+	/**
+	 * 设置我的排行
+	 */
+	private void setMysteps(JSONObject jo) {
+		// TODO Auto-generated method stub
+		if (null != jo) {
+			try {
+				((TextView) findViewById(R.id.rank)).setText(jo
+						.getString("sort") == null ? "" : "第"+jo.getString("sort")+"名");
+				((TextView) findViewById(R.id.step)).setText(jo
+						.getString("step") == null ? "" : jo.getString("step")
+						+ "步");
+				((TextView) findViewById(R.id.good)).setText(jo
+						.getString("praise") == null ? "" : jo
+						.getString("praise"));
+				String temp = jo.getString("avatar") == null ? "" : jo
+						.getString("avatar");
+				CircularImage avar = (CircularImage) findViewById(R.id.avar);
+				if (!TextUtils.isEmpty(temp) && !temp.equals("avatar")) {
+					imageLoader.displayImage(temp, avar,
+							AsyncLoadingImg.getDefaultOptions());
+				} else {
+					avar.setImageResource(R.drawable.icon_man);
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+	}
+
+	private void initview() {
+		// TODO Auto-generated method stub
+		ImageButton img_back = (ImageButton) findViewById(R.id.ib_left_handle01);
+		img_back.setOnClickListener(this);
+		img_back.setBackgroundResource(R.drawable.back_a_normal2x);
+		((TextView) findViewById(R.id.tv_title)).setText("排行榜");
+		li = ((ListView) findViewById(R.id.li));
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.ib_left_handle01:
+			finish();
+			break;
+		}
+	}
+}

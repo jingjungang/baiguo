@@ -1,0 +1,93 @@
+package com.mimi.baiguo.adapter;
+
+/**
+ * 互动-详情
+ * jjg
+ * 2016年4月28日 14:49:01
+ */
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+import com.mimi.baiguo.R;
+
+public class QADetailsAdapter extends BaseAdapter {
+
+	private Context context;
+	JSONArray ja;
+
+	public QADetailsAdapter(Context context, JSONArray ja) {
+		super();
+		this.context = context;
+		this.ja = ja;
+	}
+
+	public JSONArray getJa() {
+		return ja;
+	}
+
+	public void setJa(JSONArray ja) {
+		this.ja = ja;
+	}
+
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		if (ja != null) {
+			return ja.length();
+		}
+		return 0;
+	}
+
+	@Override
+	public Object getItem(int arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long getItemId(int arg0) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public View getView(final int position, View arg1, ViewGroup arg2) {
+		// TODO Auto-generated method stub
+		ViewHodler hodler;
+		// if (arg1 == null) {
+		hodler = new ViewHodler();
+		// arg1.setTag(hodler);
+		// } else {
+		// hodler = (ViewHodler) arg1.getTag();
+		// }
+		try {
+			JSONObject jo = (JSONObject) ja.get(position);
+			String QA = jo.getString("type");
+			if (QA.equals("ptype")) {
+				arg1 = LayoutInflater.from(context).inflate(
+						R.layout.adpter_item_qa_1, null);
+			} else {
+				arg1 = LayoutInflater.from(context).inflate(
+						R.layout.adpter_item_qa_2, null);
+			}
+			hodler.tv1 = (TextView) arg1.findViewById(R.id.tv_content);
+			hodler.tv1.setText(jo.getString("content"));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return arg1;
+	}
+
+	class ViewHodler {
+		TextView tv1;
+	}
+}
